@@ -19,6 +19,7 @@ RUN apk upgrade --update && \
 WORKDIR $WORKDIR
 
 RUN	curl -O $(curl --stderr /dev/null https://www.apache.org/dyn/closer.cgi\?as_json\=1 | jq -r '.preferred')/storm/${STORM_RELEASE}/${STORM_ARCHIVE} && \
-	tar --strip 1 -zxvf $STORM_ARCHIVE && rm -r $STORM_ARCHIVE && \
+	tar --strip 1 -zxvf $STORM_ARCHIVE && \
+	rm -r $STORM_ARCHIVE && \
 	ln -s ${WORKDIR}/bin/storm /bin/storm
 
