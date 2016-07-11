@@ -3,50 +3,123 @@
   "apps": [
     {
       "id": "nimbus",
-      "cpus": 0.1,
-      "mem": 32,
-      "ports": [0],
+      "cpus": 0.25,
+      "mem": 256,
       "instances": 1,
+      "ports": [
+        6627
+      ],
+      "requirePorts" : true,
       "container": {
         "type": "DOCKER",
         "docker": {
           "image": "jaimelive/storm-nimbus:1.0.1",
-          "network": "BRIDGE",
-          "forcePullImage":true
-        }
-      } 
+          "network": "HOST",
+          "forcePullImage": true
+        },
+        "volumes": [
+          {
+            "hostPath": "persistent_volume",
+            "containerPath": "/storm_local",
+            "mode": "RW"
+          },
+          {
+            "containerPath": "persistent_volume",
+            "mode": "RW",
+            "persistent": {
+              "size": 4096
+            }
+          }
+        ]
+      },
+      "user": "root",
+      "upgradeStrategy": {
+        "minimumHealthCapacity": 0,
+        "maximumOverCapacity": 0
+      },
+      "env": {
+        "STORM_ZOOKEEPER_SERVERS": "master.mesos",
+        "STORM_ZOOKEEPER_PORT": "2181",
+        "STORM_ZOOKEEPER_ROOT": "/marathon-storm",
+        "STORM_LOCAL_DIR": "/storm_local",
+        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos:6627\"]"
+      }
     },
     {
       "id": "ui",
       "cpus": 0.1,
-      "mem": 32,
-      "ports": [0],
+      "mem": 256,
       "instances": 1,
-      "dependencies": ["/storm/nimbus"],
+      "ports": [
+        0
+      ],
+      "dependencies": [
+        "/storm/nimbus"
+      ],
       "container": {
         "type": "DOCKER",
         "docker": {
           "image": "jaimelive/storm-ui:1.0.1",
-          "network": "BRIDGE",
-          "forcePullImage":true
+          "network": "HOST",
+          "forcePullImage": true
         }
-      } 
+      },
+      "env": {
+        "STORM_ZOOKEEPER_SERVERS": "master.mesos",
+        "STORM_ZOOKEEPER_PORT": "2181",
+        "STORM_ZOOKEEPER_ROOT": "/marathon-storm",
+        "STORM_LOCAL_DIR": "/storm_local",
+        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos:6627\"]"
+      }
     },
     {
       "id": "supervisor",
-      "cpus": 0.1,
-      "mem": 32,
-      "ports": [0],
-      "instances": 1,
-      "dependencies": ["/storm/nimbus"],
+      "cpus": 1,
+      "mem": 1024,
+      "instances": 0,
+      "ports": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "dependencies": [
+        "/storm/nimbus"
+      ],
       "container": {
         "type": "DOCKER",
         "docker": {
           "image": "jaimelive/storm-supervisor:1.0.1",
           "network": "BRIDGE",
-          "forcePullImage":true
-        }
-      } 
+          "forcePullImage": true
+        },
+        "volumes": [
+          {
+            "hostPath": "persistent_volume",
+            "containerPath": "/storm_local",
+            "mode": "RW"
+          },
+          {
+            "containerPath": "persistent_volume",
+            "mode": "RW",
+            "persistent": {
+              "size": 4096
+            }
+          }
+        ]
+      },
+      "user": "root",
+      "upgradeStrategy": {
+        "minimumHealthCapacity": 0,
+        "maximumOverCapacity": 0
+      },
+      "env": {
+        "STORM_ZOOKEEPER_SERVERS": "master.mesos",
+        "STORM_ZOOKEEPER_PORT": "2181",
+        "STORM_ZOOKEEPER_ROOT": "/marathon-storm",
+        "STORM_LOCAL_DIR": "/storm_local",
+        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos\"]"
+      }
     }
   ]
 }
