@@ -19,6 +19,11 @@
         },
         "volumes": [
           {
+            "hostPath": "logs",
+            "containerPath": "/opt/storm/logs",
+            "mode": "RW"
+          },
+          {
             "hostPath": "persistent_volume",
             "containerPath": "/storm_local",
             "mode": "RW"
@@ -42,7 +47,7 @@
         "STORM_ZOOKEEPER_PORT": "2181",
         "STORM_ZOOKEEPER_ROOT": "/marathon-storm",
         "STORM_LOCAL_DIR": "/storm_local",
-        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos:6627\"]"
+        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos\"]"
       }
     },
     {
@@ -69,14 +74,14 @@
         "STORM_ZOOKEEPER_PORT": "2181",
         "STORM_ZOOKEEPER_ROOT": "/marathon-storm",
         "STORM_LOCAL_DIR": "/storm_local",
-        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos:6627\"]"
+        "NIMBUS_SEEDS": "[\"nimbus.storm.marathon.mesos\"]"
       }
     },
     {
       "id": "supervisor",
       "cpus": 1,
       "mem": 1024,
-      "instances": 0,
+      "instances": 1,
       "ports": [
         0,
         0,
@@ -90,10 +95,15 @@
         "type": "DOCKER",
         "docker": {
           "image": "jaimelive/storm-supervisor:1.0.1",
-          "network": "BRIDGE",
+          "network": "HOST",
           "forcePullImage": true
         },
         "volumes": [
+          {
+            "hostPath": "logs",
+            "containerPath": "/opt/storm/logs",
+            "mode": "RW"
+          },
           {
             "hostPath": "persistent_volume",
             "containerPath": "/storm_local",

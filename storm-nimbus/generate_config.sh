@@ -9,7 +9,7 @@ storm.zookeeper.port: $STORM_ZOOKEEPER_PORT
 storm.zookeeper.root: "$STORM_ZOOKEEPER_ROOT"
 storm.local.dir: "$STORM_LOCAL_DIR"
 
-nimbus.thrift.port: $PORT0
+nimbus.thrift.port: 6627
 nimbus.seeds: $NIMBUS_SEEDS
 EOF
 
