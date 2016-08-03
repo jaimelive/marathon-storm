@@ -17,7 +17,8 @@ supervisor.slots.ports:
     - $PORT1
     - $PORT2
     - $PORT3
-
+    
+logviewer.port: $PORT4
 EOF
 
 cat $STORM_HOME/conf/storm.yaml

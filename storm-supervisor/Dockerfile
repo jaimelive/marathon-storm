@@ -3,6 +3,9 @@ MAINTAINER Jaime Live <jaime@live.com.pt>
 
 ARG STORM_VERSION
 
-ADD generate_config.sh .
+RUN pip install supervisor
 
-CMD ./generate_config.sh && storm supervisor
+ADD generate_config.sh .
+ADD supervisord.conf .
+
+CMD ./generate_config.sh && supervisord --nodaemon --configuration supervisord.conf

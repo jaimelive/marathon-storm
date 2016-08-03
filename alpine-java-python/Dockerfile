@@ -8,5 +8,6 @@ RUN apk upgrade --update && \
 		gettext \
 		jq \
 		python \
+		py-pip \
 		tar && \ 
 	rm -rf /tmp/* /var/cache/apk/*
